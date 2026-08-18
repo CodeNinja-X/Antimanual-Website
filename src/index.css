@@ -1378,19 +1378,17 @@ button {
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  background-color: #111111;
   color: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.fb-icon-bg {
-  background-color: #1877f2;
-}
-
-.wa-icon-bg {
-  background-color: #25d366;
-}
-
+.fb-icon-bg,
+.wa-icon-bg,
 .gm-icon-bg {
-  background-color: #ea4335;
+  background-color: #111111;
+  color: #ffffff;
 }
 
 .contact-channel-body {
