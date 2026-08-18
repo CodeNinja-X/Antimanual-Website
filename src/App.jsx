@@ -815,17 +815,44 @@ function IllustratorRenameHeroCard() {
 
 const cardSlideVariants = {
   enter: (dir) => ({
-    y: dir > 0 ? '100%' : '-100%',
+    y: dir > 0 ? '70%' : '-70%',
+    scale: 0.88,
+    rotateX: dir > 0 ? 14 : -14,
+    rotateY: dir > 0 ? -4 : 4,
     opacity: 0,
+    filter: 'blur(10px)',
   }),
   center: {
     y: '0%',
+    scale: 1,
+    rotateX: 0,
+    rotateY: 0,
     opacity: 1,
+    filter: 'blur(0px)',
   },
   exit: (dir) => ({
-    y: dir > 0 ? '-100%' : '100%',
+    y: dir > 0 ? '-70%' : '70%',
+    scale: 0.88,
+    rotateX: dir > 0 ? -14 : 14,
+    rotateY: dir > 0 ? 4 : -4,
     opacity: 0,
+    filter: 'blur(10px)',
   }),
+};
+
+const backCardTransition = {
+  type: 'spring',
+  stiffness: 240,
+  damping: 22,
+  mass: 0.85,
+};
+
+const frontCardTransition = {
+  type: 'spring',
+  stiffness: 270,
+  damping: 24,
+  mass: 0.8,
+  delay: 0.03,
 };
 
 function HeroBackgroundStage({ isOverlayActive, activeSoftware, setActiveSoftware }) {
@@ -968,6 +995,29 @@ function HeroBackgroundStage({ isOverlayActive, activeSoftware, setActiveSoftwar
       currentMouseAbs.current.x += (targetMouseAbs.current.x - currentMouseAbs.current.x) * 0.1;
       currentMouseAbs.current.y += (targetMouseAbs.current.y - currentMouseAbs.current.y) * 0.1;
 
+      // Apply multi-depth 3D floating mouse parallax
+      if (backSliderRef.current) {
+        const bx = currentMouseNorm.current.x * -16;
+        const by = currentMouseNorm.current.y * -12;
+        const rx = currentMouseNorm.current.y * 3.5;
+        const ry = currentMouseNorm.current.x * -4.5;
+        backSliderRef.current.style.transform = `translate3d(${bx.toFixed(2)}px, ${by.toFixed(2)}px, 0) rotateX(${rx.toFixed(2)}deg) rotateY(${ry.toFixed(2)}deg)`;
+      }
+
+      if (frontSliderRef.current) {
+        const fx = currentMouseNorm.current.x * 20;
+        const fy = currentMouseNorm.current.y * 15;
+        const rx = currentMouseNorm.current.y * 4.5;
+        const ry = currentMouseNorm.current.x * -5.5;
+        frontSliderRef.current.style.transform = `translate3d(${fx.toFixed(2)}px, ${fy.toFixed(2)}px, 0) rotateX(${rx.toFixed(2)}deg) rotateY(${ry.toFixed(2)}deg)`;
+      }
+
+      if (samuraiRef.current) {
+        const sx = currentMouseNorm.current.x * 7;
+        const sy = currentMouseNorm.current.y * 5;
+        samuraiRef.current.style.transform = `translate3d(${sx.toFixed(2)}px, ${sy.toFixed(2)}px, 0)`;
+      }
+
       // Tech-dissolve revealing effect on samurai
       if (!revealImgRef.current || !samuraiRef.current) return;
 
@@ -1093,7 +1143,7 @@ function HeroBackgroundStage({ isOverlayActive, activeSoftware, setActiveSoftwar
                   initial="enter"
                   animate="center"
                   exit="exit"
-                  transition={{ duration: 0.55, ease: EASE }}
+                  transition={backCardTransition}
                   className="slider-card-motion-wrap"
                 >
                   <SizeManagerHeroCard />
@@ -1106,7 +1156,7 @@ function HeroBackgroundStage({ isOverlayActive, activeSoftware, setActiveSoftwar
                   initial="enter"
                   animate="center"
                   exit="exit"
-                  transition={{ duration: 0.55, ease: EASE }}
+                  transition={backCardTransition}
                   className="slider-card-motion-wrap"
                 >
                   <IllustratorBatchHeroCard />
@@ -1151,7 +1201,7 @@ function HeroBackgroundStage({ isOverlayActive, activeSoftware, setActiveSoftwar
                   initial="enter"
                   animate="center"
                   exit="exit"
-                  transition={{ duration: 0.58, delay: 0.03, ease: EASE }}
+                  transition={frontCardTransition}
                   className="slider-card-motion-wrap"
                 >
                   <PrintFlowHeroCard />
@@ -1164,7 +1214,7 @@ function HeroBackgroundStage({ isOverlayActive, activeSoftware, setActiveSoftwar
                   initial="enter"
                   animate="center"
                   exit="exit"
-                  transition={{ duration: 0.58, delay: 0.03, ease: EASE }}
+                  transition={frontCardTransition}
                   className="slider-card-motion-wrap"
                 >
                   <IllustratorRenameHeroCard />
