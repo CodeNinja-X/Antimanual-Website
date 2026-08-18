@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://antimanual-website.vercel.app/sitemap.xml
