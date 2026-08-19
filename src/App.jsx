@@ -4,6 +4,8 @@ import { Plus, ChevronLeft, ChevronRight, ThumbsUp, FileSpreadsheet, Check, Slid
 import SAMURAI_BASE from './assets/samurai_base.png';
 import SAMURAI_REVEAL from './assets/samurai_reveal.png';
 import ANTIMANUAL_LOGO from './assets/antimanual_logo.png';
+import CustomCursor from './CustomCursor';
+import SamuraiMorph from './SamuraiMorph';
 
 const EASE = [0.16, 1, 0.3, 1];
 
@@ -163,6 +165,73 @@ const HOW_IT_WORKS_VIDEOS = {
   ]
 };
 
+function VectorCardScaler({ targetWidth, targetHeight, children, className = '' }) {
+  const containerRef = useRef(null);
+  const [scale, setScale] = useState(1);
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+
+    const computeScale = () => {
+      const parent = el.parentElement;
+      const w = parent ? parent.clientWidth : el.clientWidth;
+      const h = parent ? parent.clientHeight : el.clientHeight;
+      if (w > 0 && h > 0) {
+        const s = Math.min(w / targetWidth, h / targetHeight);
+        setScale(s);
+      }
+    };
+
+    computeScale();
+
+    const ro = new ResizeObserver(() => {
+      computeScale();
+    });
+    if (el.parentElement) ro.observe(el.parentElement);
+    ro.observe(el);
+
+    window.addEventListener('resize', computeScale);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener('resize', computeScale);
+    };
+  }, [targetWidth, targetHeight]);
+
+  return (
+    <div
+      ref={containerRef}
+      className={`vector-card-scaler ${className}`}
+      style={{
+        width: '100%',
+        height: '100%',
+        position: 'relative',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        overflow: 'visible',
+      }}
+    >
+      <div
+        style={{
+          width: `${targetWidth}px`,
+          height: `${targetHeight}px`,
+          minWidth: `${targetWidth}px`,
+          minHeight: `${targetHeight}px`,
+          maxWidth: `${targetWidth}px`,
+          maxHeight: `${targetHeight}px`,
+          transform: `scale(${scale})`,
+          transformOrigin: 'center center',
+          pointerEvents: 'auto',
+          willChange: 'transform',
+        }}
+      >
+        {children}
+      </div>
+    </div>
+  );
+}
+
 function SizeManagerHeroCard() {
   return (
     <div className="am-electron-window size-manager-window ps-module-card">
@@ -171,7 +240,7 @@ function SizeManagerHeroCard() {
           <img src={ANTIMANUAL_LOGO} alt="Antimanual" className="am-header-icon" draggable={false} />
           <span className="am-header-title">Antimanual</span>
         </div>
-        <div className="am-header-status">
+        <div className="header-status-area">
           <span className="am-connection-status">
             <span className="am-status-dot" />
             Ps Connected
@@ -435,37 +504,37 @@ function IllustratorBatchHeroCard() {
 
       <div className="dashboard-container">
         {/* Left Sidebar Navbar */}
-        <div className="navbar" id="navbar">
+        <div className="dashboard-sidebar-nav navbar" id="navbar">
           <div className="top-buttons-frame" id="top-buttons-frame">
-            <div className="sidebar-header-container">
-              <button id="sidebar-toggle-btn" className="sidebar-btn sidebar-toggle-btn" title="Toggle Sidebar">
-                <span className="sidebar-btn-icon sidebar-toggle-icon">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+            <div className="sidebar-header-container" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '4px 6px', marginBottom: '2px' }}>
+              <button id="sidebar-toggle-btn" className="sidebar-toggle-btn" title="Toggle Sidebar" style={{ background: 'none', border: 'none', padding: 0, margin: 0, width: 'auto', height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#888888', cursor: 'pointer', flexShrink: 0 }}>
+                <span className="sidebar-btn-icon sidebar-toggle-icon" style={{ display: 'flex', alignItems: 'center' }}>
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
                 </span>
               </button>
-              <span className="sidebar-title-text">Illustrator</span>
+              <span className="sidebar-title-text" style={{ margin: 0, fontSize: '11px', fontWeight: 'bold', color: '#f0f0f0', whiteSpace: 'nowrap' }}>Illustrator</span>
             </div>
             <button className="sidebar-btn active">
               <span className="sidebar-btn-icon">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/></svg>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/></svg>
               </span>
               <span className="sidebar-btn-text">Design Transfer</span>
             </button>
             <button className="sidebar-btn">
               <span className="sidebar-btn-icon">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="8" y1="13" x2="16" y2="13"></line><line x1="8" y1="17" x2="16" y2="17"></line></svg>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="8" y1="13" x2="16" y2="13"></line><line x1="8" y1="17" x2="16" y2="17"></line></svg>
               </span>
               <span className="sidebar-btn-text">Batch Rename</span>
             </button>
             <button className="sidebar-btn">
               <span className="sidebar-btn-icon">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
               </span>
               <span className="sidebar-btn-text">Auto Box</span>
             </button>
             <button className="sidebar-btn">
               <span className="sidebar-btn-icon">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="4" y1="21" x2="4" y2="14"></line><line x1="4" y1="10" x2="4" y2="3"></line><line x1="12" y1="21" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="3"></line><line x1="20" y1="21" x2="20" y2="16"></line><line x1="20" y1="12" x2="20" y2="3"></line></svg>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="4" y1="21" x2="4" y2="14"></line><line x1="4" y1="10" x2="4" y2="3"></line><line x1="12" y1="21" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="3"></line><line x1="20" y1="21" x2="20" y2="16"></line><line x1="20" y1="12" x2="20" y2="3"></line></svg>
               </span>
               <span className="sidebar-btn-text">2D Nesting</span>
             </button>
@@ -860,28 +929,10 @@ function HeroBackgroundStage({ isOverlayActive, activeSoftware, setActiveSoftwar
   const backSliderRef = useRef(null);
   const frontSliderRef = useRef(null);
   const samuraiRef = useRef(null);
-  const canvasRef = useRef(null);
-  const revealImgRef = useRef(null);
   const [slideDirection, setSlideDirection] = useState(1);
 
   const targetMouseNorm = useRef({ x: 0, y: 0 });
   const currentMouseNorm = useRef({ x: 0, y: 0 });
-  const targetMouseAbs = useRef({
-    x: typeof window !== 'undefined' ? window.innerWidth / 2 : 500,
-    y: typeof window !== 'undefined' ? window.innerHeight / 2 : 400
-  });
-  const currentMouseAbs = useRef({
-    x: typeof window !== 'undefined' ? window.innerWidth / 2 : 500,
-    y: typeof window !== 'undefined' ? window.innerHeight / 2 : 400
-  });
-
-  useEffect(() => {
-    const img = new Image();
-    img.src = SAMURAI_REVEAL;
-    img.onload = () => {
-      revealImgRef.current = img;
-    };
-  }, []);
 
   const lastSnapTimeRef = useRef(0);
 
@@ -904,10 +955,8 @@ function HeroBackgroundStage({ isOverlayActive, activeSoftware, setActiveSoftwar
     const handleWheel = (e) => {
       if (Math.abs(e.deltaY) < 6) return;
       if (e.deltaY > 0) {
-        // Scroll down -> advance to other software
         triggerSnap(1, activeSoftware === 'photoshop' ? 'illustrator' : 'photoshop');
       } else {
-        // Scroll up -> reverse to other software
         triggerSnap(-1, activeSoftware === 'photoshop' ? 'illustrator' : 'photoshop');
       }
     };
@@ -923,11 +972,9 @@ function HeroBackgroundStage({ isOverlayActive, activeSoftware, setActiveSoftwar
       const currentY = e.touches[0].clientY;
       const diff = touchStartY - currentY;
       if (diff > 25) {
-        // Swiped up -> scroll down
         triggerSnap(1, activeSoftware === 'photoshop' ? 'illustrator' : 'photoshop');
         touchStartY = currentY;
       } else if (diff < -25) {
-        // Swiped down -> scroll up
         triggerSnap(-1, activeSoftware === 'photoshop' ? 'illustrator' : 'photoshop');
         touchStartY = currentY;
       }
@@ -966,8 +1013,6 @@ function HeroBackgroundStage({ isOverlayActive, activeSoftware, setActiveSoftwar
       const h = window.innerHeight || 1;
       targetMouseNorm.current.x = (e.clientX - w / 2) / (w / 2);
       targetMouseNorm.current.y = (e.clientY - h / 2) / (h / 2);
-      targetMouseAbs.current.x = e.clientX;
-      targetMouseAbs.current.y = e.clientY;
     };
 
     window.addEventListener('mousemove', handleMouseMove, { passive: true });
@@ -976,26 +1021,16 @@ function HeroBackgroundStage({ isOverlayActive, activeSoftware, setActiveSoftwar
 
   useEffect(() => {
     let animId;
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d', { willReadFrequently: false });
-    if (!ctx) return;
-
-    const pseudoRandom = (x, y) => {
-      const n = Math.sin(x * 127.1 + y * 311.7) * 43758.5453123;
-      return n - Math.floor(n);
-    };
 
     const render = (time) => {
       animId = requestAnimationFrame(render);
+      const t = time * 0.001;
 
       // Lerp mouse coordinates
       currentMouseNorm.current.x += (targetMouseNorm.current.x - currentMouseNorm.current.x) * 0.08;
       currentMouseNorm.current.y += (targetMouseNorm.current.y - currentMouseNorm.current.y) * 0.08;
-      currentMouseAbs.current.x += (targetMouseAbs.current.x - currentMouseAbs.current.x) * 0.1;
-      currentMouseAbs.current.y += (targetMouseAbs.current.y - currentMouseAbs.current.y) * 0.1;
 
-      // Apply multi-depth 3D floating mouse parallax
+      // Apply multi-depth 3D floating mouse parallax to sliders
       if (backSliderRef.current) {
         const bx = currentMouseNorm.current.x * -16;
         const by = currentMouseNorm.current.y * -12;
@@ -1012,105 +1047,17 @@ function HeroBackgroundStage({ isOverlayActive, activeSoftware, setActiveSoftwar
         frontSliderRef.current.style.transform = `translate3d(${fx.toFixed(2)}px, ${fy.toFixed(2)}px, 0) rotateX(${rx.toFixed(2)}deg) rotateY(${ry.toFixed(2)}deg)`;
       }
 
+      // Idle breathing physics + smooth dynamic rotateY turning on samurai
       if (samuraiRef.current) {
-        const sx = currentMouseNorm.current.x * 7;
+        const sx = currentMouseNorm.current.x * 10;
         const sy = currentMouseNorm.current.y * 5;
-        samuraiRef.current.style.transform = `translate3d(${sx.toFixed(2)}px, ${sy.toFixed(2)}px, 0)`;
+        const idleTurn = Math.sin(t * 0.9) * 2.2;
+        const mouseTurn = currentMouseNorm.current.x * 9.5;
+        const totalTurnY = mouseTurn + idleTurn;
+        const breathY = Math.sin(t * 1.8) * 3.5;
+        const breathScale = 1 + Math.sin(t * 1.8) * 0.005;
+        samuraiRef.current.style.transform = `translate3d(${sx.toFixed(2)}px, ${(sy + breathY).toFixed(2)}px, 0) rotateY(${totalTurnY.toFixed(2)}deg) scale(${breathScale.toFixed(4)})`;
       }
-
-      // Tech-dissolve revealing effect on samurai
-      if (!revealImgRef.current || !samuraiRef.current) return;
-
-      const rect = samuraiRef.current.getBoundingClientRect();
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      const width = rect.width;
-      const height = rect.height;
-
-      if (width === 0 || height === 0) return;
-
-      if (canvas.width !== Math.round(width * dpr) || canvas.height !== Math.round(height * dpr)) {
-        canvas.width = Math.round(width * dpr);
-        canvas.height = Math.round(height * dpr);
-      }
-
-      ctx.save();
-      ctx.scale(dpr, dpr);
-      ctx.clearRect(0, 0, width, height);
-
-      const mx = currentMouseAbs.current.x - rect.left;
-      const my = currentMouseAbs.current.y - rect.top;
-
-      const CELL = 11;
-      const RADIUS = 560;
-      const t = time * 0.001;
-
-      const minCol = Math.max(0, Math.floor((mx - RADIUS - 24) / CELL));
-      const maxCol = Math.min(Math.ceil(width / CELL), Math.ceil((mx + RADIUS + 24) / CELL));
-      const minRow = Math.max(0, Math.floor((my - RADIUS - 24) / CELL));
-      const maxRow = Math.min(Math.ceil(height / CELL), Math.ceil((my + RADIUS + 24) / CELL));
-
-      ctx.globalCompositeOperation = 'source-over';
-
-      for (let col = minCol; col <= maxCol; col++) {
-        for (let row = minRow; row <= maxRow; row++) {
-          const gx = col * CELL;
-          const gy = row * CELL;
-          const cx = gx + CELL / 2;
-          const cy = gy + CELL / 2;
-
-          const dist = Math.hypot(cx - mx, cy - my);
-          const edgeNoise = (pseudoRandom(col * 0.5, row * 0.5) - 0.5) * 46;
-          const effectiveDist = dist + edgeNoise;
-          const normDist = effectiveDist / RADIUS;
-
-          if (normDist > 1.0) continue;
-
-          const alive = Math.sin(t * 1.6 + col * 0.25 + row * 0.25) * 0.03;
-          const rand = pseudoRandom(col * 1.4 + Math.floor(t * 0.3) * 0.05, row * 1.4);
-
-          let size = CELL;
-          if (normDist < 0.52) {
-            size = CELL;
-          } else if (normDist < 0.75) {
-            if (rand > 0.94 - alive) continue;
-            size = CELL * (0.78 + pseudoRandom(col + 3, row + 5) * 0.22);
-          } else if (normDist < 0.90) {
-            if (rand > 0.68 - alive) continue;
-            size = CELL * (0.50 + pseudoRandom(col + 7, row + 11) * 0.25);
-          } else {
-            if (rand > 0.40 - alive) continue;
-            size = Math.max(2.5, CELL * 0.35);
-          }
-
-          const drawX = Math.round(gx + (CELL - size) / 2);
-          const drawY = Math.round(gy + (CELL - size) / 2);
-
-          ctx.fillStyle = '#ffffff';
-          ctx.fillRect(drawX, drawY, Math.round(size), Math.round(size));
-        }
-      }
-
-      ctx.globalCompositeOperation = 'source-in';
-      const imgW = revealImgRef.current.naturalWidth || 800;
-      const imgH = revealImgRef.current.naturalHeight || 1200;
-      const imgAspect = imgW / imgH;
-      const canvasAspect = width / height;
-
-      let renderW, renderH, renderX, renderY;
-      if (canvasAspect > imgAspect) {
-        renderH = height;
-        renderW = height * imgAspect;
-        renderX = (width - renderW) / 2;
-        renderY = height - renderH;
-      } else {
-        renderW = width;
-        renderH = width / imgAspect;
-        renderX = 0;
-        renderY = height - renderH;
-      }
-
-      ctx.drawImage(revealImgRef.current, renderX, renderY, renderW, renderH);
-      ctx.restore();
     };
 
     animId = requestAnimationFrame(render);
@@ -1146,7 +1093,9 @@ function HeroBackgroundStage({ isOverlayActive, activeSoftware, setActiveSoftwar
                   transition={backCardTransition}
                   className="slider-card-motion-wrap"
                 >
-                  <SizeManagerHeroCard />
+                  <VectorCardScaler targetWidth={737} targetHeight={486}>
+                    <SizeManagerHeroCard />
+                  </VectorCardScaler>
                 </motion.div>
               ) : (
                 <motion.div
@@ -1159,26 +1108,23 @@ function HeroBackgroundStage({ isOverlayActive, activeSoftware, setActiveSoftwar
                   transition={backCardTransition}
                   className="slider-card-motion-wrap"
                 >
-                  <IllustratorBatchHeroCard />
+                  <VectorCardScaler targetWidth={737} targetHeight={486}>
+                    <IllustratorBatchHeroCard />
+                  </VectorCardScaler>
                 </motion.div>
               )}
             </AnimatePresence>
           </div>
         </div>
 
-        {/* Middle Layer 2: Samurai Character (Static, Base + Dissolve Reveal Canvas) */}
+        {/* Middle Layer 2: Samurai Character (Subtle Morphing + Soft Ripple Wipe Centered Reveal) */}
         <div className="samurai-positioner">
           <div ref={samuraiRef} className="layer-samurai">
             <div className="samurai-visual-box">
-              <img
-                src={SAMURAI_BASE}
-                alt="Antimanual Samurai Model"
-                className="samurai-img-base"
-                draggable={false}
-              />
-              <canvas
-                ref={canvasRef}
-                className="samurai-canvas-dissolve"
+              <div className="samurai-ambient-aura" />
+              <SamuraiMorph
+                baseSrc={SAMURAI_BASE}
+                revealSrc={SAMURAI_REVEAL}
               />
             </div>
           </div>
@@ -1204,7 +1150,9 @@ function HeroBackgroundStage({ isOverlayActive, activeSoftware, setActiveSoftwar
                   transition={frontCardTransition}
                   className="slider-card-motion-wrap"
                 >
-                  <PrintFlowHeroCard />
+                  <VectorCardScaler targetWidth={454} targetHeight={300}>
+                    <PrintFlowHeroCard />
+                  </VectorCardScaler>
                 </motion.div>
               ) : (
                 <motion.div
@@ -1217,7 +1165,9 @@ function HeroBackgroundStage({ isOverlayActive, activeSoftware, setActiveSoftwar
                   transition={frontCardTransition}
                   className="slider-card-motion-wrap"
                 >
-                  <IllustratorRenameHeroCard />
+                  <VectorCardScaler targetWidth={454} targetHeight={300}>
+                    <IllustratorRenameHeroCard />
+                  </VectorCardScaler>
                 </motion.div>
               )}
             </AnimatePresence>
@@ -1364,6 +1314,9 @@ export default function App() {
 
   return (
     <div className={`hero-viewport ${isOverlayActive ? 'overlay-active' : ''}`}>
+      {/* Black Circle Custom Cursor */}
+      <CustomCursor />
+
       {/* Hero Background Stage with Parallax, Sliders & Samurai Tech-Dissolve */}
       <HeroBackgroundStage
         isOverlayActive={isOverlayActive}

@@ -93,38 +93,29 @@ button {
   height: 100%;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  overflow: visible;
   border-radius: 8px;
   will-change: transform, opacity, filter;
   transform-style: preserve-3d;
   backface-visibility: hidden;
-  container-type: size;
 }
 
-/* Proportional Vector-Scale for Back Cards (Base design: 737x486, fit both width & height) */
-.back-slider-positioner .size-manager-window,
-.back-slider-positioner .illu-batch-panel {
-  width: 737px !important;
-  height: 486px !important;
-  min-width: 737px !important;
-  min-height: 486px !important;
-  max-width: 737px !important;
-  max-height: 486px !important;
-  transform-origin: top left;
-  transform: scale(min(calc(100cqw / 737), calc(100cqh / 486)));
+.vector-card-scaler {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: visible;
 }
 
-/* Proportional Vector-Scale for Front Cards (Base design: 454x300, fit both width & height) */
-.front-slider-positioner .basic-mode-window,
-.front-slider-positioner .illu-rename-panel {
-  width: 454px !important;
-  height: 300px !important;
-  min-width: 454px !important;
-  min-height: 300px !important;
-  max-width: 454px !important;
-  max-height: 300px !important;
-  transform-origin: top left;
-  transform: scale(min(calc(100cqw / 454), calc(100cqh / 300)));
+.size-manager-window,
+.illu-batch-panel,
+.basic-mode-window,
+.illu-rename-panel {
+  width: 100%;
+  height: 100%;
 }
 
 /* Layer 1: Back Slider Positioner (Exact: X=283, Y=121, W=737, H=486 in 1920x1080) */
@@ -143,12 +134,12 @@ button {
 
 .slider-positioner.cursor-pointer:hover .am-electron-window {
   border-color: rgba(255, 255, 255, 0.28);
-  box-shadow: 0 32px 64px rgba(0, 0, 0, 0.7), 0 0 28px rgba(255, 255, 255, 0.06);
+  box-shadow: none;
 }
 
 .back-slider-positioner {
   left: 14.7396%;
-  top: 11.2037%;
+  top: 15.5%;
   width: 38.3854%;
   height: 45.0%;
   z-index: 11;
@@ -173,7 +164,7 @@ button {
   background-color: #141414;
   border: 1px solid #2a2a2a;
   border-radius: 8px;
-  box-shadow: 0 24px 52px rgba(0, 0, 0, 0.55), 0 6px 16px rgba(0, 0, 0, 0.35);
+  box-shadow: none;
   transition: border-color 0.25s ease, box-shadow 0.25s ease;
   display: flex;
   flex-direction: column;
@@ -1144,7 +1135,7 @@ button {
 .samurai-positioner {
   position: absolute;
   left: 46.0938%;
-  bottom: 0;
+  bottom: -4.5%;
   width: 27.7083%;
   height: 100%;
   z-index: 12;
@@ -1152,6 +1143,7 @@ button {
   display: flex;
   align-items: flex-end;
   justify-content: center;
+  perspective: 1200px;
 }
 
 .layer-samurai {
@@ -1161,6 +1153,8 @@ button {
   display: flex;
   align-items: flex-end;
   justify-content: center;
+  transform-style: preserve-3d;
+  will-change: transform;
 }
 
 .samurai-visual-box {
@@ -1172,7 +1166,44 @@ button {
   justify-content: center;
 }
 
-.samurai-img-base {
+.samurai-ambient-aura {
+  position: absolute;
+  bottom: 5%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  height: 75%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at center bottom, rgba(0, 0, 0, 0.14) 0%, rgba(20, 20, 20, 0.05) 40%, transparent 75%);
+  filter: blur(40px);
+  pointer-events: none;
+  z-index: 0;
+  animation: samuraiAuraPulse 6s ease-in-out infinite alternate;
+}
+
+@keyframes samuraiAuraPulse {
+  0% {
+    transform: translateX(-50%) scale(0.95);
+    opacity: 0.4;
+  }
+  100% {
+    transform: translateX(-50%) scale(1.04);
+    opacity: 0.7;
+    filter: blur(44px);
+  }
+}
+
+.samurai-morph-container {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  filter: drop-shadow(0 28px 56px rgba(0, 0, 0, 0.22)) drop-shadow(0 0 12px rgba(0, 0, 0, 0.08));
+}
+
+.samurai-morph-canvas,
+.samurai-fallback-img {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -1181,16 +1212,6 @@ button {
   object-position: bottom center;
   user-select: none;
   -webkit-user-drag: none;
-  filter: drop-shadow(0 28px 56px rgba(0, 0, 0, 0.14));
-}
-
-.samurai-canvas-dissolve {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  display: block;
 }
 
 /* Layer 3: Front Window Positioner (Exact: X=1383, Y=540, W=454, H=300 in 1920x1080) */
@@ -2816,4 +2837,108 @@ button {
 .snap-pill.active.ai-active .snap-pill-dot.ai-dot {
   background-color: #ffffff;
 }
+
+/* ==========================================================================
+   Black Circle Custom Cursor
+   ========================================================================== */
+@media (pointer: fine) {
+  html, body, *, *::before, *::after {
+    cursor: none !important;
+  }
+}
+
+.custom-cursor-dot {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 9px;
+  height: 9px;
+  margin-top: -4.5px;
+  margin-left: -4.5px;
+  background-color: #000000;
+  border-radius: 50%;
+  border: none;
+  pointer-events: none;
+  z-index: 999999;
+  opacity: 0;
+  transition: opacity 0.2s ease, transform 0.04s ease;
+  will-change: transform;
+}
+
+.custom-cursor-dot.visible {
+  opacity: 1;
+}
+
+.custom-cursor-dot.hovered {
+  transform: scale(0.7);
+  background-color: #000000;
+}
+
+.custom-cursor-dot.clicked {
+  transform: scale(1.3);
+}
+
+.custom-cursor-ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 38px;
+  height: 38px;
+  margin-top: -19px;
+  margin-left: -19px;
+  border-radius: 50%;
+  border: none;
+  background-color: rgba(0, 0, 0, 0.14);
+  pointer-events: none;
+  z-index: 999998;
+  opacity: 0;
+  transition: opacity 0.2s ease, width 0.24s cubic-bezier(0.16, 1, 0.3, 1), height 0.24s cubic-bezier(0.16, 1, 0.3, 1), margin 0.24s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s ease;
+  will-change: transform, width, height;
+}
+
+.custom-cursor-ring.visible {
+  opacity: 1;
+}
+
+.custom-cursor-ring.hovered {
+  width: 60px;
+  height: 60px;
+  margin-top: -30px;
+  margin-left: -30px;
+  background-color: rgba(0, 0, 0, 0.22);
+}
+
+.custom-cursor-ring.clicked {
+  transform: scale(0.75);
+  background-color: rgba(0, 0, 0, 0.32);
+}
+
+/* Click Animation Ripple Shockwave (Fill only, low opacity) */
+.custom-cursor-click-ripple {
+  position: fixed;
+  width: 26px;
+  height: 26px;
+  margin-top: -13px;
+  margin-left: -13px;
+  border-radius: 50%;
+  border: none;
+  background-color: rgba(0, 0, 0, 0.22);
+  pointer-events: none;
+  z-index: 999997;
+  transform: translate3d(0, 0, 0) scale(0.6);
+  animation: cursorRippleAnim 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes cursorRippleAnim {
+  0% {
+    opacity: 0.4;
+    transform: scale(0.6);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(4.4);
+  }
+}
+
+
 

@@ -12,7 +12,8 @@
     "lucide-react": "^1.16.0",
     "motion": "^12.4.7",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "three": "^0.185.1"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.3.4",
