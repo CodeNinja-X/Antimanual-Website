@@ -6,6 +6,7 @@ import SAMURAI_REVEAL from './assets/samurai_reveal.png';
 import ANTIMANUAL_LOGO from './assets/antimanual_logo.png';
 import CustomCursor from './CustomCursor';
 import SamuraiMorph from './SamuraiMorph';
+import { playHapticSnap } from './audio';
 
 const EASE = [0.16, 1, 0.3, 1];
 
@@ -686,7 +687,7 @@ function IllustratorBatchHeroCard() {
               {/* Log Console Card */}
               <div className="sm-card" style={{ margin: 0, flex: 1, display: 'flex', flexDirection: 'column', boxSizing: 'border-box', minHeight: '100px' }}>
                 <h3 className="sm-card-title">Real-Time Log</h3>
-                <div id="illu-trans-log-console" style={{ flex: 1, background: '#121212', border: '1px solid #252525', borderRadius: '4px', padding: '6px 8px', overflowY: 'auto', fontFamily: 'Consolas, monospace', fontSize: '9px', color: '#adadad', lineHeight: '1.45', whiteSpace: 'pre-wrap' }}>
+                <div id="illu-trans-log-console" style={{ flex: 1, background: '#121212', border: '1px solid #252525', borderRadius: '4px', padding: '6px 8px', overflowY: 'auto', fontFamily: "'SFMono-Regular', Menlo, Monaco, Consolas, monospace", fontSize: '9px', color: '#adadad', lineHeight: '1.45', whiteSpace: 'pre-wrap' }}>
                   [TRANSFER] Connected to Adobe Illustrator CC.{"\n"}
                   [BATCH] 10 templates verified across source directory.{"\n"}
                   Ready to run batch execution.
@@ -846,7 +847,7 @@ function IllustratorRenameHeroCard() {
               <h3 className="sm-card-title" style={{ margin: 0, fontSize: '10px' }}>Execution Log</h3>
               <button id="illu-log-copy" className="sm-btn sm-btn-secondary" style={{ height: '18px', padding: '0 4px', fontSize: '8px', margin: 0 }}>Copy</button>
             </div>
-            <div id="illu-log-console" className="brand-scrollbar-active" style={{ flex: 1, background: '#131313', border: '1px solid #252525', borderRadius: '4px', padding: '6px', overflowY: 'auto', fontFamily: 'Consolas, monospace', fontSize: '8.5px', color: '#adadad', lineHeight: '1.45', whiteSpace: 'pre-wrap' }}>
+            <div id="illu-log-console" className="brand-scrollbar-active" style={{ flex: 1, background: '#131313', border: '1px solid #252525', borderRadius: '4px', padding: '6px', overflowY: 'auto', fontFamily: "'SFMono-Regular', Menlo, Monaco, Consolas, monospace", fontSize: '8.5px', color: '#adadad', lineHeight: '1.45', whiteSpace: 'pre-wrap' }}>
               [CSV] 14 order rows detected.{"\n"}
               [SCALE] Constraints mapped.{"\n"}
               Ready to execute.
@@ -940,6 +941,7 @@ function HeroBackgroundStage({ isOverlayActive, activeSoftware, setActiveSoftwar
     const now = Date.now();
     if (now - lastSnapTimeRef.current < 450) return;
     lastSnapTimeRef.current = now;
+    playHapticSnap(direction);
     setSlideDirection(direction);
     if (setActiveSoftware) {
       setActiveSoftware(nextSoftware);
@@ -1449,6 +1451,25 @@ export default function App() {
 
           {/* Right Side: Tags Pill & Menu Button */}
           <div className="navbar-right">
+            {/* Compact Mobile Like Button */}
+            <button
+              type="button"
+              className={`mobile-like-btn ${hasLiked ? 'liked' : ''}`}
+              onClick={handleLike}
+              disabled={hasLiked || isLiking}
+              title={hasLiked ? 'You liked Antimanual!' : 'Click to like Antimanual'}
+              aria-label="Like Antimanual"
+            >
+              <motion.span
+                className="like-icon-wrap"
+                animate={likeAnim ? { scale: [1, 1.45, 1], rotate: [0, -15, 0] } : {}}
+                transition={{ duration: 0.4 }}
+              >
+                <ThumbsUp size={12} strokeWidth={2.2} className={hasLiked ? 'liked-icon' : ''} />
+              </motion.span>
+              <span>{likes.toLocaleString()}</span>
+            </button>
+
             <div className="tags-pill">
               <span className="tag-label">Free access</span>
               <span className="tag-label">No credit card required</span>
@@ -1647,6 +1668,7 @@ export default function App() {
                       <button
                         className={`software-pill ${activeSoftware === 'photoshop' ? 'active' : ''}`}
                         onClick={() => {
+                          playHapticSnap(-1);
                           setActiveSoftware('photoshop');
                           setActiveFeatureIndex(0);
                         }}
@@ -1663,6 +1685,7 @@ export default function App() {
                       <button
                         className={`software-pill ${activeSoftware === 'illustrator' ? 'active' : ''}`}
                         onClick={() => {
+                          playHapticSnap(1);
                           setActiveSoftware('illustrator');
                           setActiveFeatureIndex(0);
                         }}
@@ -1690,7 +1713,10 @@ export default function App() {
                         <button
                           key={`${activeSoftware}-${feat.id}`}
                           className={`feature-tab-item ${isActive ? 'active' : ''}`}
-                          onClick={() => setActiveFeatureIndex(idx)}
+                          onClick={() => {
+                            playHapticSnap(1);
+                            setActiveFeatureIndex(idx);
+                          }}
                         >
                           {isActive && (
                             <motion.div
@@ -1784,6 +1810,7 @@ export default function App() {
                   <button
                     className={`software-pill ${activeSoftware === 'photoshop' ? 'active' : ''}`}
                     onClick={() => {
+                      playHapticSnap(-1);
                       setActiveSoftware('photoshop');
                       setActiveVideoIndex(0);
                     }}
@@ -1800,6 +1827,7 @@ export default function App() {
                   <button
                     className={`software-pill ${activeSoftware === 'illustrator' ? 'active' : ''}`}
                     onClick={() => {
+                      playHapticSnap(1);
                       setActiveSoftware('illustrator');
                       setActiveVideoIndex(0);
                     }}

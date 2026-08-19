@@ -1,11 +1,48 @@
 import React, { useEffect, useRef, useState } from 'react';
 
+export const SOUND_PRESETS = [
+  { id: 'zeeek', label: 'Katana Zeeek', src: '/sounds/katana_zeeek.wav' },
+  { id: 'zeng', label: 'Katana Zeng', src: '/sounds/katana_sheng.wav' },
+  { id: 'flurry', label: 'Zeng Flurry', src: '/sounds/katana_sheng_echo.wav' },
+];
+
+const audioCache = {};
+
+function getCachedAudio(src) {
+  if (!audioCache[src]) {
+    const audio = new Audio(src);
+    audio.preload = 'auto';
+    audioCache[src] = audio;
+  }
+  return audioCache[src];
+}
+
+// Preload audio files on user's first interaction
+if (typeof window !== 'undefined') {
+  const preloadAll = () => {
+    SOUND_PRESETS.forEach((p) => getCachedAudio(p.src));
+    window.removeEventListener('pointerdown', preloadAll);
+    window.removeEventListener('keydown', preloadAll);
+  };
+  window.addEventListener('pointerdown', preloadAll, { passive: true });
+  window.addEventListener('keydown', preloadAll, { passive: true });
+}
+
+export function playRealisticSwordSound(presetId) {
+  try {
+    const preset = SOUND_PRESETS.find((p) => p.id === presetId) || SOUND_PRESETS[0];
+    const baseAudio = getCachedAudio(preset.src);
+    const audioClone = baseAudio.cloneNode();
+    audioClone.volume = 0.98;
+    audioClone.play().catch(() => {});
+  } catch (e) {}
+}
+
 /**
  * Ultra-Smooth Interactive Samurai WebGL Morph Component
  * - Mouse Reveal Effect: Seamless, borderless feathered reveal smoothly following cursor
  * - Click Toggle Effect: Centered full-figure soft ripple wipe reveal on click (and vice versa)
- * - Subtle visual morphing + soft liquid ripples
- * - Strictly zero harsh circle marks, creases, or idle leakage
+ * - Razor-Sharp Realistic Katana ZENG Sound Effect
  */
 export default function SamuraiMorph({
   baseSrc,
@@ -350,6 +387,8 @@ export default function SamuraiMorph({
       if (vertexBuffer) gl.deleteBuffer(vertexBuffer);
       if (texBase) gl.deleteTexture(texBase);
       if (texReveal) gl.deleteTexture(texReveal);
+      if (vs) gl.deleteShader(vs);
+      if (fs) gl.deleteShader(fs);
       if (program) gl.deleteProgram(program);
     };
   }, [baseSrc, revealSrc]);
@@ -366,6 +405,7 @@ export default function SamuraiMorph({
         stateRef.current.targetClickCenterY = cy;
       }
     }
+    playRealisticSwordSound('zeeek');
     setIsRevealed((prev) => !prev);
   };
 
@@ -384,8 +424,11 @@ export default function SamuraiMorph({
         justifyContent: 'center',
         cursor: 'pointer',
         userSelect: 'none',
+        WebkitUserSelect: 'none',
+        touchAction: 'manipulation',
       }}
     >
+
       {/* Fallback image before WebGL textures load */}
       {!isLoaded && (
         <img
