@@ -1959,23 +1959,41 @@ svg {
   width: 100%;
   height: 100%;
   height: 100dvh;
-  background: rgba(255, 255, 255, 0.95);
+  max-height: 100dvh;
+  background: rgba(255, 255, 255, 0.96);
   backdrop-filter: blur(32px);
   -webkit-backdrop-filter: blur(32px);
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  padding: max(72px, calc(env(safe-area-inset-top) + 54px)) max(32px, env(safe-area-inset-left)) max(24px, env(safe-area-inset-bottom)) max(32px, env(safe-area-inset-right));
-  overflow: hidden;
+  padding: max(76px, calc(env(safe-area-inset-top) + 60px)) max(32px, env(safe-area-inset-left)) max(28px, calc(env(safe-area-inset-bottom) + 16px)) max(32px, env(safe-area-inset-right));
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.15) transparent;
+}
+
+.features-overlay-view::-webkit-scrollbar {
+  width: 5px;
+}
+
+.features-overlay-view::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.features-overlay-view::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 9999px;
 }
 
 .features-wrapper {
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-width: 1200px;
+  max-width: 1240px;
   height: 100%;
+  min-height: 100%;
   margin: 0 auto;
   gap: 16px;
 }
@@ -1985,7 +2003,8 @@ svg {
   justify-content: flex-end;
   align-items: center;
   width: 100%;
-  padding-bottom: 4px;
+  padding-bottom: 2px;
+  flex-shrink: 0;
 }
 
 .features-back-btn {
@@ -1999,6 +2018,7 @@ svg {
   padding: 4px 14px 4px 4px;
   cursor: pointer;
   transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s ease, border-color 0.2s ease;
+  user-select: none;
 }
 
 @media (hover: hover) {
@@ -2029,74 +2049,26 @@ svg {
 
 .features-section-row {
   display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
+  flex-direction: row;
+  justify-content: space-between;
   align-items: flex-start;
-  gap: 36px;
+  gap: 64px;
   width: 100%;
   flex: 1;
+  min-height: 0;
+  height: calc(100% - 48px);
   overflow: hidden;
-}
-
-@media (min-width: 768px) {
-  .features-section-row {
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 76px;
-    height: calc(100% - 48px);
-  }
-}
-
-@media (max-width: 767px) {
-  .features-overlay-view {
-    padding: max(56px, calc(env(safe-area-inset-top) + 16px)) max(16px, env(safe-area-inset-left)) max(24px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-right));
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-    height: auto;
-    min-height: 100dvh;
-  }
-
-  .features-wrapper {
-    height: auto;
-    min-height: auto;
-  }
-
-  .features-top-row {
-    justify-content: flex-start;
-  }
-
-  .features-section-row {
-    overflow: visible;
-    height: auto;
-    gap: 24px;
-  }
-
-  .features-left-column {
-    width: 100%;
-    max-width: 100%;
-    min-width: 0;
-    flex: 0 0 auto;
-    gap: 20px;
-  }
-
-  .features-right-column {
-    max-height: none;
-    overflow: visible;
-    padding-right: 0;
-    width: 100%;
-    flex: 1 1 auto;
-  }
 }
 
 .features-left-column {
   display: flex;
   flex-direction: column;
-  gap: 28px;
+  gap: 24px;
   width: 340px;
   max-width: 340px;
   min-width: 340px;
   flex: 0 0 340px;
+  flex-shrink: 0;
 }
 
 .features-left-header {
@@ -2107,18 +2079,18 @@ svg {
 }
 
 .features-left-header .subtitle-text {
-  font-size: 12px;
+  font-size: 11.5px;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: rgba(0, 0, 0, 0.48);
+  color: rgba(0, 0, 0, 0.5);
 }
 
 .features-main-heading {
   font-weight: 400;
-  font-size: clamp(1.55rem, 2.3vw, 2.05rem);
+  font-size: clamp(1.6rem, 2.3vw, 2.15rem);
   letter-spacing: -0.025em;
-  line-height: 1.16;
+  line-height: 1.15;
   color: #111111;
   margin: 0;
 }
@@ -2214,7 +2186,7 @@ svg {
   display: flex;
   align-items: center;
   gap: 14px;
-  padding: 13px 18px;
+  padding: 12px 18px;
   border-radius: 12px;
   border: 1px solid transparent;
   background-color: transparent;
@@ -2264,21 +2236,17 @@ svg {
   letter-spacing: -0.01em;
 }
 
-.tab-duration-pill {
+.tab-arrow {
   position: relative;
   z-index: 2;
-  font-size: 11px;
-  font-weight: 500;
-  color: rgba(0, 0, 0, 0.45);
-  background-color: rgba(0, 0, 0, 0.05);
-  padding: 2px 7px;
-  border-radius: 9999px;
-  letter-spacing: 0.02em;
+  font-size: 14px;
+  opacity: 0.4;
+  transition: transform 0.2s ease, opacity 0.2s ease;
 }
 
-.feature-tab-item.active .tab-duration-pill {
-  color: rgba(255, 255, 255, 0.85);
-  background-color: rgba(255, 255, 255, 0.18);
+.feature-tab-item.active .tab-arrow {
+  opacity: 0.9;
+  transform: translateX(2px);
 }
 
 .how-it-works-badge-pill {
@@ -2299,7 +2267,6 @@ svg {
   letter-spacing: 0.01em;
 }
 
-
 /* Right Side Column */
 .features-right-column {
   flex: 1 1 0;
@@ -2309,7 +2276,7 @@ svg {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  max-height: calc(100dvh - 130px);
+  max-height: calc(100dvh - 140px);
   overflow-y: auto;
   padding-right: 16px;
   scrollbar-width: thin;
@@ -2343,11 +2310,11 @@ svg {
 .detail-tag {
   display: inline-flex;
   align-self: flex-start;
-  font-size: 11.5px;
+  font-size: 11px;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  color: rgba(0, 0, 0, 0.48);
+  color: rgba(0, 0, 0, 0.5);
   background-color: rgba(0, 0, 0, 0.05);
   padding: 4px 13px;
   border-radius: 9999px;
@@ -2355,7 +2322,7 @@ svg {
 
 .detail-headline {
   font-weight: 400;
-  font-size: clamp(1.85rem, 3.1vw, 2.5rem);
+  font-size: clamp(1.8rem, 2.9vw, 2.45rem);
   letter-spacing: -0.03em;
   line-height: 1.14;
   color: #111111;
@@ -2363,7 +2330,7 @@ svg {
 }
 
 .detail-description {
-  font-size: 16px;
+  font-size: 15.5px;
   font-weight: 400;
   color: rgba(0, 0, 0, 0.74);
   line-height: 1.65;
@@ -2414,6 +2381,248 @@ svg {
 
 .highlight-desc {
   color: rgba(0, 0, 0, 0.74);
+}
+
+/* =========================================================================
+   Responsive Breakpoints for Features Section across All Devices
+   ========================================================================= */
+
+/* Tablets & Small Laptops (768px - 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .features-overlay-view {
+    padding: max(72px, calc(env(safe-area-inset-top) + 54px)) max(24px, env(safe-area-inset-left)) max(24px, calc(env(safe-area-inset-bottom) + 16px)) max(24px, env(safe-area-inset-right));
+  }
+
+  .features-section-row {
+    gap: 32px;
+    height: calc(100% - 44px);
+  }
+
+  .features-left-column {
+    width: 270px;
+    min-width: 270px;
+    max-width: 270px;
+    flex: 0 0 270px;
+    gap: 18px;
+  }
+
+  .features-main-heading {
+    font-size: 1.5rem;
+    line-height: 1.18;
+  }
+
+  .feature-tab-item {
+    padding: 10px 14px;
+    gap: 10px;
+  }
+
+  .tab-title {
+    font-size: 13.5px;
+  }
+
+  .features-right-column {
+    max-height: calc(100dvh - 130px);
+    padding-right: 10px;
+  }
+
+  .detail-headline {
+    font-size: 1.65rem;
+  }
+
+  .detail-description {
+    font-size: 14.5px;
+    line-height: 1.6;
+  }
+
+  .highlight-text {
+    font-size: 13.5px;
+    line-height: 1.52;
+  }
+}
+
+/* Mobile Devices (< 768px) */
+@media (max-width: 767px) {
+  .features-overlay-view {
+    padding: max(68px, calc(env(safe-area-inset-top) + 52px)) max(16px, env(safe-area-inset-left)) max(32px, calc(env(safe-area-inset-bottom) + 24px)) max(16px, env(safe-area-inset-right));
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    height: 100%;
+    height: 100dvh;
+    max-height: 100dvh;
+  }
+
+  .features-wrapper {
+    height: auto;
+    min-height: auto;
+    gap: 14px;
+  }
+
+  .features-top-row {
+    justify-content: flex-start;
+  }
+
+  .features-section-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 18px;
+    width: 100%;
+    overflow: visible;
+    height: auto;
+  }
+
+  .features-left-column {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    flex: 0 0 auto;
+    gap: 14px;
+  }
+
+  .features-left-header {
+    gap: 6px;
+  }
+
+  .features-left-header .subtitle-text {
+    font-size: 11px;
+  }
+
+  .features-main-heading {
+    font-size: clamp(1.35rem, 5.2vw, 1.75rem);
+    line-height: 1.18;
+  }
+
+  .software-switch {
+    margin-top: 4px;
+    padding: 3px;
+    gap: 4px;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .software-pill {
+    padding: 6px 14px;
+    font-size: 12.5px;
+  }
+
+  .features-tabs-list {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 2px 2px 6px 2px;
+    scrollbar-width: none;
+  }
+
+  .features-tabs-list::-webkit-scrollbar {
+    display: none;
+  }
+
+  .feature-tab-item {
+    padding: 8px 14px;
+    border-radius: 9999px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    font-size: 13px;
+    gap: 6px;
+  }
+
+  .feature-tab-active-bg {
+    border-radius: 9999px;
+  }
+
+  .tab-num {
+    font-size: 11px;
+    width: auto;
+    margin-right: 2px;
+  }
+
+  .tab-title {
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  .tab-arrow {
+    display: none;
+  }
+
+  .features-right-column {
+    max-height: none;
+    overflow: visible;
+    padding-right: 0;
+    width: 100%;
+    flex: 1 1 auto;
+    margin-top: 2px;
+  }
+
+  .detail-tag {
+    font-size: 10.5px;
+    padding: 3px 10px;
+  }
+
+  .detail-headline {
+    font-size: clamp(1.25rem, 5.2vw, 1.6rem);
+    line-height: 1.2;
+    word-break: break-word;
+  }
+
+  .detail-description {
+    font-size: 13.5px;
+    line-height: 1.58;
+  }
+
+  .detail-highlights {
+    gap: 11px;
+    margin-top: 4px;
+    padding-top: 14px;
+  }
+
+  .highlight-item {
+    gap: 10px;
+  }
+
+  .highlight-dot {
+    width: 5px;
+    height: 5px;
+    margin-top: 7px;
+  }
+
+  .highlight-text {
+    font-size: 13px;
+    line-height: 1.5;
+  }
+}
+
+/* Landscape / Short Viewports (< 640px height) */
+@media (max-height: 640px) {
+  .features-overlay-view {
+    padding-top: max(54px, calc(env(safe-area-inset-top) + 46px));
+    padding-bottom: max(20px, calc(env(safe-area-inset-bottom) + 12px));
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .features-wrapper {
+    height: auto;
+    min-height: auto;
+  }
+
+  .features-section-row {
+    height: auto;
+    overflow: visible;
+    gap: 20px;
+  }
+
+  .features-right-column {
+    max-height: none;
+    overflow: visible;
+  }
+
+  .features-main-heading {
+    font-size: 1.35rem;
+  }
 }
 
 /* =========================================================================
