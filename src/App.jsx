@@ -6,7 +6,6 @@ import SAMURAI_REVEAL from './assets/samurai_reveal.png';
 import ANTIMANUAL_LOGO from './assets/antimanual_logo.png';
 import CustomCursor from './CustomCursor';
 import SamuraiMorph from './SamuraiMorph';
-import { playHapticSnap } from './audio';
 
 const EASE = [0.16, 1, 0.3, 1];
 
@@ -941,7 +940,6 @@ function HeroBackgroundStage({ isOverlayActive, activeSoftware, setActiveSoftwar
     const now = Date.now();
     if (now - lastSnapTimeRef.current < 450) return;
     lastSnapTimeRef.current = now;
-    playHapticSnap(direction);
     setSlideDirection(direction);
     if (setActiveSoftware) {
       setActiveSoftware(nextSoftware);
@@ -1668,7 +1666,6 @@ export default function App() {
                       <button
                         className={`software-pill ${activeSoftware === 'photoshop' ? 'active' : ''}`}
                         onClick={() => {
-                          playHapticSnap(-1);
                           setActiveSoftware('photoshop');
                           setActiveFeatureIndex(0);
                         }}
@@ -1685,7 +1682,6 @@ export default function App() {
                       <button
                         className={`software-pill ${activeSoftware === 'illustrator' ? 'active' : ''}`}
                         onClick={() => {
-                          playHapticSnap(1);
                           setActiveSoftware('illustrator');
                           setActiveFeatureIndex(0);
                         }}
@@ -1714,7 +1710,6 @@ export default function App() {
                           key={`${activeSoftware}-${feat.id}`}
                           className={`feature-tab-item ${isActive ? 'active' : ''}`}
                           onClick={() => {
-                            playHapticSnap(1);
                             setActiveFeatureIndex(idx);
                           }}
                         >
@@ -1810,7 +1805,6 @@ export default function App() {
                   <button
                     className={`software-pill ${activeSoftware === 'photoshop' ? 'active' : ''}`}
                     onClick={() => {
-                      playHapticSnap(-1);
                       setActiveSoftware('photoshop');
                       setActiveVideoIndex(0);
                     }}
@@ -1827,7 +1821,6 @@ export default function App() {
                   <button
                     className={`software-pill ${activeSoftware === 'illustrator' ? 'active' : ''}`}
                     onClick={() => {
-                      playHapticSnap(1);
                       setActiveSoftware('illustrator');
                       setActiveVideoIndex(0);
                     }}
