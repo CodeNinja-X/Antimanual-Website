@@ -8,6 +8,7 @@ import CustomCursor from './CustomCursor';
 import SamuraiMorph from './SamuraiMorph';
 
 const EASE = [0.16, 1, 0.3, 1];
+const PHOTOSHOP_DOWNLOAD_URL = 'https://github.com/CodeNinja-X/Antimanual-Release/releases/download/v4.53.8/antimanual.Setup.v4.53.8.exe';
 
 const SOFTWARE_FEATURES = {
   illustrator: [
@@ -1516,16 +1517,15 @@ export default function App() {
                     transition={{ duration: 0.22, ease: EASE }}
                   >
                     <div className="menu-dropdown-title">Download</div>
-                    <button
+                    <a
+                      href={PHOTOSHOP_DOWNLOAD_URL}
+                      download="antimanual.Setup.v4.53.8.exe"
                       className="menu-dropdown-item"
-                      onClick={() => {
-                        setActiveSoftware('photoshop');
-                        setActiveView('features');
-                        setMenuOpen(false);
-                      }}
+                      onClick={() => setMenuOpen(false)}
                     >
                       <span className="dropdown-item-text">Adobe Photoshop</span>
-                    </button>
+                      <ExternalLink size={12} style={{ opacity: 0.5, flexShrink: 0 }} />
+                    </a>
                     <button
                       className="menu-dropdown-item"
                       onClick={() => {
@@ -1571,18 +1571,21 @@ export default function App() {
                   exit={{ opacity: 0, transition: { duration: 0.35, ease: EASE } }}
                   transition={{ duration: 0.55, ease: EASE }}
                 >
-                  {/* Subtitle */}
+                  {/* Tagline */}
                   <div className="subtitle-row">
                     <span className="subtitle-dot" aria-hidden="true" />
-                    <span className="subtitle-text">Best sublimation automation 2026</span>
+                    <span className="subtitle-text">Zero Manual Work. Infinite Creative Flow.</span>
                   </div>
 
                   {/* Heading */}
                   <h1 className="hero-heading">
-                    Zero Manual Work.
-                    <br />
-                    Infinite Creative Flow.
+                    Sublimation Automation
                   </h1>
+
+                  {/* Paragraph */}
+                  <p className="hero-paragraph">
+                    Automate grading, sizing, renaming, nesting, and more.
+                  </p>
 
                   {/* Buttons */}
                   <div className="cta-row">
