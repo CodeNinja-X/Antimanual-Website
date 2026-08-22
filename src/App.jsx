@@ -8,7 +8,7 @@ import CustomCursor from './CustomCursor';
 import SamuraiMorph from './SamuraiMorph';
 
 const EASE = [0.16, 1, 0.3, 1];
-const PHOTOSHOP_DOWNLOAD_URL = 'https://github.com/CodeNinja-X/Antimanual-Release/releases/download/v4.58.8/antimanual.Setup.v4.58.8.exe';
+const PHOTOSHOP_DOWNLOAD_URL = 'https://github.com/CodeNinja-X/Antimanual-Release/releases/download/v4.58.9/antimanual.Setup.v4.58.9.exe';
 
 const SOFTWARE_FEATURES = {
   illustrator: [
@@ -1519,7 +1519,7 @@ export default function App() {
                     <div className="menu-dropdown-title">Download</div>
                     <a
                       href={PHOTOSHOP_DOWNLOAD_URL}
-                      download="antimanual.Setup.v4.58.8.exe"
+                      download="antimanual.Setup.v4.58.9.exe"
                       className="menu-dropdown-item"
                       onClick={() => setMenuOpen(false)}
                     >
